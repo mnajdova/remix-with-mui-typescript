@@ -1,10 +1,11 @@
-import { hydrate } from "react-dom";
-import { RemixBrowser } from "remix";
-import { CacheProvider, ThemeProvider } from "@emotion/react";
-import CssBaseline from "@mui/material/CssBaseline";
+import * as React from 'react';
+import { hydrate } from 'react-dom';
+import { RemixBrowser } from 'remix';
+import { CacheProvider, ThemeProvider } from '@emotion/react';
+import CssBaseline from '@mui/material/CssBaseline';
 
-import createEmotionCache from "./src/createEmotionCache";
-import theme from "./src/theme";
+import createEmotionCache from './src/createEmotionCache';
+import theme from './src/theme';
 
 const emotionCache = createEmotionCache();
 
@@ -16,5 +17,5 @@ hydrate(
       <RemixBrowser />
     </ThemeProvider>
   </CacheProvider>,
-  document
+  document,
 );

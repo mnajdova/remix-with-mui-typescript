@@ -1,21 +1,22 @@
-import { renderToString } from "react-dom/server";
-import { RemixServer } from "remix";
-import type { EntryContext } from "remix";
+import * as React from 'react';
+import { renderToString } from 'react-dom/server';
+import { RemixServer } from 'remix';
+import type { EntryContext } from 'remix';
 
-import createEmotionCache from "./src/createEmotionCache";
-import theme from "./src/theme";
-import StylesContext from "./src/StylesContext";
+import createEmotionCache from './src/createEmotionCache';
+import theme from './src/theme';
+import StylesContext from './src/StylesContext';
 
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
-import { CacheProvider } from "@emotion/react";
-import createEmotionServer from "@emotion/server/create-instance";
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { CacheProvider } from '@emotion/react';
+import createEmotionServer from '@emotion/server/create-instance';
 
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
 ) {
   const cache = createEmotionCache();
   const { extractCriticalToChunks } = createEmotionServer(cache);
@@ -34,7 +35,7 @@ export default function handleRequest(
   const html = renderToString(
     <StylesContext.Provider value={null}>
       <MuiRemixServer />
-    </StylesContext.Provider>
+    </StylesContext.Provider>,
   );
 
   // Grab the CSS from emotion
@@ -44,12 +45,12 @@ export default function handleRequest(
   const markup = renderToString(
     <StylesContext.Provider value={emotionChunks.styles}>
       <MuiRemixServer />
-    </StylesContext.Provider>
+    </StylesContext.Provider>,
   );
 
-  responseHeaders.set("Content-Type", "text/html");
+  responseHeaders.set('Content-Type', 'text/html');
 
-  return new Response("<!DOCTYPE html>" + markup, {
+  return new Response(`<!DOCTYPE html>${markup}`, {
     status: responseStatusCode,
     headers: responseHeaders,
   });
