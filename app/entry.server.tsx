@@ -5,7 +5,6 @@ import type { EntryContext } from 'remix';
 
 import createEmotionCache from './src/createEmotionCache';
 import theme from './src/theme';
-import StylesContext from './src/StylesContext';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
@@ -32,11 +31,7 @@ export default function handleRequest(
   );
 
   // Render the component to a string.
-  const html = renderToString(
-    <StylesContext.Provider value={null}>
-      <MuiRemixServer />
-    </StylesContext.Provider>,
-  );
+  const html = renderToString(<MuiRemixServer />);
 
   // Grab the CSS from emotion
   const { styles } = extractCriticalToChunks(html);
@@ -54,9 +49,6 @@ export default function handleRequest(
     /<meta(\s)*name="emotion-insertion-point"(\s)*content="emotion-insertion-point"(\s)*\/>/,
     `<meta name="emotion-insertion-point" content="emotion-insertion-point"/>${stylesHTML}`
   );
-
-  console.log("Invoked in server");
-  console.log(markup);
 
   responseHeaders.set('Content-Type', 'text/html');
 
