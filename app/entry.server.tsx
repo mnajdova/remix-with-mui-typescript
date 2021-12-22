@@ -39,14 +39,24 @@ export default function handleRequest(
   );
 
   // Grab the CSS from emotion
-  const emotionChunks = extractCriticalToChunks(html);
+  const { styles } = extractCriticalToChunks(html);
 
-  // Re-render including the extracted css.
-  const markup = renderToString(
-    <StylesContext.Provider value={emotionChunks.styles}>
-      <MuiRemixServer />
-    </StylesContext.Provider>,
+  let stylesHTML = "";
+
+  styles.forEach(({ key, ids, css }) => {
+    const emotionKey = `${key} ${ids.join(' ')}`;
+    const newStyleTag = `<style data-emotion="${emotionKey}">${css}</style>`;
+    stylesHTML = `${stylesHTML}${newStyleTag}`;
+  })
+
+  // Add the emotion style tags after the insertino point meta tag
+  const markup = html.replace(
+    /<meta(\s)*name="emotion-insertion-point"(\s)*content="emotion-insertion-point"(\s)*\/>/,
+    `<meta name="emotion-insertion-point" content="emotion-insertion-point"/>${stylesHTML}`
   );
+
+  console.log("Invoked in server");
+  console.log(markup);
 
   responseHeaders.set('Content-Type', 'text/html');
 
